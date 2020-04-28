@@ -23,12 +23,13 @@ stage ('Init'){
         if (env.BRANCH_NAME == 'master') {
         stage 'Only on master'
         println 'This happens only on master'
+          withSonarQubeEnv(credentialsId: '199c1a35-7206-4170-89c1-0ea5d2910d02', installationName: 'Sonarqube') { // You can override the credential to be used
+          sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
         } else {
         stage 'Other branches'
         println "Current branch ${env.BRANCH_NAME}"
         }
-    withSonarQubeEnv(credentialsId: 'f225455e-ea59-40fa-8af7-08176e86507a', installationName: 'My SonarQube Server') { // You can override the credential to be used
-      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+
     }
   }
 }
