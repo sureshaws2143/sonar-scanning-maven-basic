@@ -27,13 +27,18 @@ stage ('Init'){
         stage 'Other branches'
         println "Current branch ${env.BRANCH_NAME}"
         }
-          withSonarQubeEnv(credentialsId: 'a6df94174c22090555ae29bfd03d0a9c2d69851e', installationName: 'Sonarqube') { // You can override the credential to be used
+          withSonarQubeEnv(credentialsId: '3eb0086801b129b5036cdfa9122cf130fc1f6ad7', installationName: 'Sonarqube') { // You can override the credential to be used
           //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
+
+// sh 'mvn sonar:sonar \
+//   -Dsonar.projectKey=sonarscanner-maven-basic \
+//   -Dsonar.host.url=http://10.1.3.29:9000/sonarqube \
+//   -Dsonar.login=5d7694152e415c79121e161e461066048016117d'
 
 sh 'mvn sonar:sonar \
   -Dsonar.projectKey=sonarscanner-maven-basic \
-  -Dsonar.host.url=http://10.1.3.30:9000 \
-  -Dsonar.login=ba69203248ba92f48adb10d391deff03739d850f'
+  -Dsonar.host.url=http://10.1.3.29:9000/sonarqube \
+  -Dsonar.login=5d7694152e415c79121e161e461066048016117d'
 
     }
   }
