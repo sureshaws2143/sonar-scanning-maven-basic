@@ -27,7 +27,7 @@ stage ('Init'){
         stage 'Other branches'
         println "Current branch ${env.BRANCH_NAME}"
         }
-          withSonarQubeEnv(credentialsId: '199c1a35-7206-4170-89c1-0ea5d2910d02', installationName: 'Sonarqube') { // You can override the credential to be used
+          withSonarQubeEnv(credentialsId: 'a6df94174c22090555ae29bfd03d0a9c2d69851e', installationName: 'Sonarqube') { // You can override the credential to be used
           //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
 
 sh 'mvn sonar:sonar \
