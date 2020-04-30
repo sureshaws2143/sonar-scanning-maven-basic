@@ -38,7 +38,7 @@ stage ('Init'){
 sh 'mvn sonar:sonar \
   -Dsonar.projectKey=sonarscanner-maven-basic \
   -Dsonar.host.url=http://10.1.3.29:9000/sonarqube \
-  -Dsonar.login=032a84ddc35fc09627852d0e2f2b118dae58a169'
+  -Dsonar.login=1141d5896f177861ef5b06bd7fcde2e555fd6e80'
 
     }
   }
