@@ -14,7 +14,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>11</maven.compiler.release>
   </properties>
-  
+
   <dependencies>
     <dependency>
       <groupId>com.google.guava</groupId>
@@ -48,7 +48,8 @@
           <version>0.8.4</version>
         </plugin>
       </plugins>
-</build>
+    </pluginManagement>
+  </build>
 
   <profiles>
     <profile>
@@ -78,9 +79,6 @@
           </plugin>
         </plugins>
       </build>
-       </profile>
-       <id>artifactory</id>
-
-</profile>
-</profiles>
+    </profile>
+  </profiles>
 </project>
