@@ -48,10 +48,7 @@
           <version>0.8.4</version>
         </plugin>
       </plugins>
-
-
-
-  </build>
+</build>
 
   <profiles>
     <profile>
@@ -85,5 +82,5 @@
        <id>artifactory</id>
 
 </profile>
-
+</profiles>
 </project>
