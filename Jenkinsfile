@@ -19,6 +19,10 @@ stage ('Init'){
   stage('SCM') {
     git 'https://github.com/sureshaws2143/sonar-scanning-maven-basic.git'
   }
+    stage('Build') {
+    sh 'mvn clean install'
+    //git 'https://github.com/sureshaws2143/sonar-scanning-maven-basic.git'
+  }
   stage('SonarQube analysis') {
         if (env.BRANCH_NAME == 'master') {
         stage 'Only on master'
