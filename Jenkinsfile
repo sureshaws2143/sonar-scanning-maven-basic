@@ -20,7 +20,7 @@ stage ('Init'){
     git 'https://github.com/sureshaws2143/sonar-scanning-maven-basic.git'
   }
     stage('Build') {
-    sh 'mvn -X clean install'
+    sh 'mvn -X package'
     //git 'https://github.com/sureshaws2143/sonar-scanning-maven-basic.git'
   }
   stage('SonarQube analysis') {
