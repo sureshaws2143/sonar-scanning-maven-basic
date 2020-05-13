@@ -11,7 +11,8 @@
 //   println "Current branch ${env.BRANCH_NAME}"
 // }
 
-node {
+node (dev-agentnode)
+  {
 stage ('Init'){
   checkout scm
   sh 'echo $BRANCH_NAME'
