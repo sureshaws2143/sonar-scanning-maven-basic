@@ -83,6 +83,25 @@ sh 'mvn sonar:sonar \
 
 
 
+stage("publish to nexus") 
+{
+        nexusArtifactUploader(
+            nexusVersion: 'nexus3',
+            protocol: 'http',
+            nexusUrl: 'http://192.168.1.160:8090',
+            groupId: 'org.sonarqube',
+            version: version,
+            repository: 'maven-releases',
+            credentialsId: 'nexus',
+            artifacts: [
+                [artifactId: projectName,
+                classifier: '',
+                file: 'my-service-' + version + '.jar',
+                type: 'jar']
+            ]
+        )
+}
+
         stage("publish to nexus") 
         {
                     // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
