@@ -83,7 +83,8 @@ sh 'mvn sonar:sonar \
 
 stage("publish to nexus") 
 {
-  def server = Artifactory.server "artifactory@ibsrv02"
+  // def server = Artifactory.server "artifactory@ibsrv02"
+  def server = Artifactory.server "nexus"
   def buildInfo = Artifactory.newBuildInfo()
   buildInfo.env.capture = true
   def rtMaven = Artifactory.newMavenBuild()
