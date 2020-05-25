@@ -14,12 +14,20 @@
 node ('dev-agentnode')
   {
 stage ('Init'){
-  checkout scm
+  // checkout scm
+  // sh 'echo $BRANCH_NAME'
+}
+
+stage ('Clean Workspace'){
+  // checkout scm
+  step([$class: 'WsCleanup'])
   sh 'echo $BRANCH_NAME'
 }
-  stage('SCM') {
+
+  stage('Prepare Workspace') {
     git 'https://github.com/sureshaws2143/sonar-scanning-maven-basic.git'
     println "Current branch ${env.BRANCH_NAME}"
+    sh 'echo $BRANCH_NAME'
   }
 
   stage('SonarQube analysis') {
@@ -69,8 +77,7 @@ sh 'mvn sonar:sonar \
 
     stage('App Build') {
     sh 'mvn clean install'
-    //git 'https://github.com/sureshaws2143/sonar-scanning-maven-basic.git'
-  }
+    }
 
 // Artifactory Upload Stage
 
