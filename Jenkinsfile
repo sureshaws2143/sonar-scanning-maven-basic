@@ -88,8 +88,8 @@ stage("publish to nexus")
   def buildInfo = Artifactory.newBuildInfo()
   buildInfo.env.capture = true
   def rtMaven = Artifactory.newMavenBuild()
-  rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
-  rtMaven.opts = "-Denv=dev"
+  // rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
+  // rtMaven.opts = "-Denv=dev"
   rtMaven.deployer releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
   rtMaven.resolver releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
 
