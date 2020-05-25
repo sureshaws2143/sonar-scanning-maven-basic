@@ -90,13 +90,13 @@ stage("publish to nexus")
             protocol: 'http',
             nexusUrl: 'http://192.168.1.160:8090',
             groupId: 'org.sonarqube',
-            // version: version,
+            version: 1.0.0,
             repository: 'maven-releases',
             credentialsId: 'nexus',
             artifacts: [
-                [artifactId: projectName,
+                [artifactId: simple-project,
                 classifier: '',
-                file: 'my-service-' + version + '.jar',
+                file: 'simple-project-' + version + '.jar',
                 type: 'jar']
             ]
         )
