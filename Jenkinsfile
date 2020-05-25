@@ -94,7 +94,7 @@ stage("publish to nexus")
             repository: 'maven-releases',
             credentialsId: 'nexus',
             artifacts: [
-                [artifactId: simple-project,
+                [artifactId: 'simple-project',
                 classifier: '',
                 file: 'simple-project-' + version + '.jar',
                 type: 'jar']
