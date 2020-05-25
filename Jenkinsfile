@@ -84,14 +84,17 @@ sh 'mvn sonar:sonar \
 stage("publish to nexus") 
 {
   // def server = Artifactory.server "artifactory@ibsrv02"
-  def server = Artifactory.server "nexus"
+  def server = Artifactory.server "artifactory"
   def buildInfo = Artifactory.newBuildInfo()
   buildInfo.env.capture = true
   def rtMaven = Artifactory.newMavenBuild()
   rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
   rtMaven.opts = "-Denv=dev"
-  rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
-  rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
+  rtMaven.deployer releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
+  rtMaven.resolver releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
+
+  //rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
+  //rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
 
   rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
 
