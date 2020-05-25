@@ -76,7 +76,7 @@ sh 'mvn sonar:sonar \
   }
 
     stage('App Build') {
-    sh 'mvn clean install'
+    sh 'mvn clean install -Dmaven.test.skip=true'
     }
 
 // Artifactory Upload Stage
