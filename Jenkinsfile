@@ -19,15 +19,16 @@ stage ('Init'){
 }
   stage('SCM') {
     git 'https://github.com/sureshaws2143/sonar-scanning-maven-basic.git'
+    println "Current branch ${env.BRANCH_NAME}"
   }
 
   stage('SonarQube analysis') {
-        if (env.BRANCH_NAME == 'master') {
-        stage 'Only on master'
-        println 'This happens only on master'
-        } else {
-        stage 'Other branches'
-        println "Current branch ${env.BRANCH_NAME}"
+        // if (env.BRANCH_NAME == 'master') {
+        // stage 'Only on master'
+        // println 'This happens only on master'
+        // } else {
+        // stage 'Other branches'
+        // println "Current branch ${env.BRANCH_NAME}"
         }
           withSonarQubeEnv(credentialsId: 'jenkins-sonar-int', installationName: 'sonarqube') { // You can override the credential to be used
           //sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar'
