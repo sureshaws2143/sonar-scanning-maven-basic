@@ -102,21 +102,10 @@ sh 'mvn sonar:sonar \
 //         )
 // }
 
-        stage("publish to nexus") 
-        {
-        nexusPublisher 
-        nexusInstanceId: 'nexus',
-        nexusRepositoryId: 'maven-releases',
-        packages: [[$class: 'MavenPackage',
-            mavenAssetList: [[classifier: '',
-            extension: 'jar',
-            filePath: '/target/']],
-                  mavenCoordinate:
-                  [artifactId: 'sonarscanner-maven-basic',
-                  groupId: 'org.sonarqube',
-                  packaging: 'jar',
-                  version: '1.0-SNAPSHOT']]]
-        }
+stage("publish to nexus") 
+{
+nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '1.0']]]
+}
         // stage("publish to nexus") 
         // {
         //             // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
