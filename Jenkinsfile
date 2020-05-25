@@ -83,25 +83,29 @@ sh 'mvn sonar:sonar \
 
 
 
+// stage("publish to nexus") 
+// {
+//         nexusArtifactUploader(
+//             nexusVersion: 'nexus3',
+//             protocol: 'http',
+//             nexusUrl: '192.168.1.160:8090',
+//             groupId: 'org.sonarqube',
+//             version: '1.0',
+//             repository: 'maven-releases',
+//             credentialsId: 'nexus',
+//             artifacts: [
+//                 [artifactId: 'sonarscanner-maven-basic',
+//                 classifier: '',
+//                 file: 'sonarscanner-maven-basic-' + '$version' + '.jar',
+//                 type: 'jar']
+//             ]
+//         )
+// }
+
 stage("publish to nexus") 
 {
-        nexusArtifactUploader(
-            nexusVersion: 'nexus3',
-            protocol: 'http',
-            nexusUrl: 'http://192.168.1.160:8090',
-            groupId: 'org.sonarqube',
-            version: '1.0',
-            repository: 'maven-releases',
-            credentialsId: 'nexus',
-            artifacts: [
-                [artifactId: 'sonarscanner-maven-basic',
-                classifier: '',
-                file: 'sonarscanner-maven-basic-' + '$version' + '.jar',
-                type: 'jar']
-            ]
-        )
+nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '1.0-SNAPSHOT']]]
 }
-
         // stage("publish to nexus") 
         // {
         //             // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
