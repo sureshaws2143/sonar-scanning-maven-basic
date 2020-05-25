@@ -90,7 +90,7 @@ stage("publish to nexus")
             protocol: 'http',
             nexusUrl: 'http://192.168.1.160:8090',
             groupId: 'org.sonarqube',
-            version: version,
+            // version: version,
             repository: 'maven-releases',
             credentialsId: 'nexus',
             artifacts: [
