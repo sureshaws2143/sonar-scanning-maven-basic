@@ -13,11 +13,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- <maven.compiler.release>11</maven.compiler.release> -->
-  </properties>
-
-  <properties>
     <maven.test.skip>true</maven.test.skip>
   </properties>
+
+  <!-- <properties>
+    <maven.test.skip>true</maven.test.skip>
+  </properties> -->
 
         <!-- Start of Nexus artifactory Maven Site plugin  -->
   <distributionManagement>
