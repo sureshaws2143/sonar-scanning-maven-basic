@@ -96,7 +96,7 @@ stage("publish to nexus")
             artifacts: [
                 [artifactId: 'simple-project',
                 classifier: '',
-                file: 'simple-project-' + $'version' + '.jar',
+                file: 'simple-project-' + $version + '.jar',
                 type: 'jar']
             ]
         )
