@@ -81,27 +81,70 @@ sh 'mvn sonar:sonar \
 
 // Artifactory Upload Stage -- New
 
-stage("publish to nexus") 
-{
-  // def server = Artifactory.server "artifactory@ibsrv02"
-  def server = Artifactory.server "artifactory"
-  def buildInfo = Artifactory.newBuildInfo()
-  buildInfo.env.capture = true
-  def rtMaven = Artifactory.newMavenBuild()
-  // rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
-  // rtMaven.opts = "-Denv=dev"
-  // rtMaven.deployer releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
-  // rtMaven.resolver releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
 
-  rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
-  rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
 
-  rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
+        stage("publish to nexus") 
+        {
+                    // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
+                    pom = readMavenPom file: "pom.xml";
+                    // Find built artifact under target folder
+                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    // Print some info from the artifact found
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    // Extract the path from the File found
+                    artifactPath = filesByGlob[0].path;
+                    // Assign to a boolean response verifying If the artifact name exists
+                    artifactExists = fileExists artifactPath;
+                    if(artifactExists) {
+                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
+                        nexusArtifactUploader(
+                            nexusVersion: NEXUS_VERSION,
+                            protocol: NEXUS_PROTOCOL,
+                            nexusUrl: NEXUS_URL,
+                            groupId: pom.groupId,
+                            version: pom.version,
+                            repository: NEXUS_REPOSITORY,
+                            credentialsId: NEXUS_CREDENTIAL_ID,
+                            artifacts: [
+                                // Artifact generated such as .jar, .ear and .war files.
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: artifactPath,
+                                type: pom.packaging],
+                                // Lets upload the pom.xml file for additional information for Transitive dependencies
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: "pom.xml",
+                                type: "pom"]
+                            ]
+                        );
+                    } else {
+                        error "*** File: ${artifactPath}, could not be found";
+                    }
+                }
 
-  buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
-  // Publish build info.
-  server.publishBuildInfo buildInfo
-}
+
+// stage("publish to nexus") 
+// {
+//   // def server = Artifactory.server "artifactory@ibsrv02"
+//   def server = Artifactory.server "artifactory"
+//   def buildInfo = Artifactory.newBuildInfo()
+//   buildInfo.env.capture = true
+//   def rtMaven = Artifactory.newMavenBuild()
+//   // rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
+//   // rtMaven.opts = "-Denv=dev"
+//   // rtMaven.deployer releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
+//   // rtMaven.resolver releaseRepo:'maven-releases', snapshotRepo:'maven-snapshots', server: server
+
+//   rtMaven.deployer releaseRepo:'libs-release-local', snapshotRepo:'libs-snapshot-local', server: server
+//   rtMaven.resolver releaseRepo:'libs-release', snapshotRepo:'libs-snapshot', server: server
+
+//   rtMaven.run pom: 'pom.xml', goals: 'clean install', buildInfo: buildInfo
+
+//   buildInfo.retention maxBuilds: 10, maxDays: 7, deleteBuildArtifacts: true
+//   // Publish build info.
+//   server.publishBuildInfo buildInfo
+// }
 
 
 // Artifactory Upload Stage
