@@ -30,6 +30,10 @@ stage ('Clean Workspace'){
     sh 'echo $BRANCH_NAME'
   }
 
+    stage('App Build') {
+    sh 'mvn clean install -Dmaven.test.skip=true'
+    }
+
   stage('SonarQube analysis') {
         // if (env.BRANCH_NAME == 'master') {
         // stage 'Only on master'
@@ -63,9 +67,9 @@ sh 'mvn -Dmaven.test.skip=true clean install sonar:sonar \
 
     }
 
-emailext attachLog: true, body: '''""" Hi All, <div>The Jenkis Build is <span style=\'color:red\'><b> .....</b></span></div>
-  <div><b> JENKINS URL: </b><a href=\'${env.BUILD_URL}\'>${env.BUILD_URL}</a>""",
-  <p><b>SONAR ANALYSIS: </b><a href=http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic>http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic </a><p></div>''', compressLog: true, mimeType: 'html', recipientProviders: [developers(), requestor()], subject: 'Jenkins JOB Status \'${env.JOB_BASE_NAME} [${env.BUILDID}]\'', to: 'spancosuresh@gmail.com'
+// emailext attachLog: true, body: '''""" Hi All, <div>The Jenkis Build is <span style=\'color:red\'><b> .....</b></span></div>
+//   <div><b> JENKINS URL: </b><a href=\'${env.BUILD_URL}\'>${env.BUILD_URL}</a>""",
+//   <p><b>SONAR ANALYSIS: </b><a href=http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic>http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic </a><p></div>''', compressLog: true, mimeType: 'html', recipientProviders: [developers(), requestor()], subject: 'Jenkins JOB Status \'${env.JOB_BASE_NAME} [${env.BUILDID}]\'', to: 'spancosuresh@gmail.com'
 
 
 // emailext(
@@ -81,9 +85,7 @@ emailext attachLog: true, body: '''""" Hi All, <div>The Jenkis Build is <span st
 
   }
 
-    stage('App Build') {
-    sh 'mvn clean install -Dmaven.test.skip=true'
-    }
+
 
 // Artifactory Upload Stage -- New
 
@@ -123,12 +125,12 @@ stage("publish to nexus")
 {
   //createTag nexusInstanceId: 'nexus', tagName: '${env.BUILD_NUMBER}-$artifactId-1.0'
   //createTag nexusInstanceId: 'nexus', tagName: '${env.BUILD_NUMBER}'
-  nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: '', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '3.0'
+  //nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: '', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '3.0'
   //nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: '', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '2.0'
   //nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '2.0']]]
   //nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.*']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '2.0']]], tagName: 'env.BUILD_NUMBER-artifactId-1.0'
   //nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '1.0']]]
-  //nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '3.0']]]
+  nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '3.0']]]
 }
 
         // stage("publish to nexus") 
