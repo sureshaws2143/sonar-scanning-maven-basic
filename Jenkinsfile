@@ -65,7 +65,7 @@ sh 'mvn -Dmaven.test.skip=true clean install sonar:sonar \
 
 emailext attachLog: true, body: '''""" Hi All, <div>The Jenkis Build is <span style=\'color:red\'><b> .....</b></span></div>
   <div><b> JENKINS URL: </b><a href=\'${env.BUILD_URL}\'>${env.BUILD_URL}</a>""",
-  <p><b>SONAR ANALYSIS: </b><a href=http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic>http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic </a><p></div>''', compressLog: true, mimeType: 'html', recipientProviders: [developers(), requestor()], subject: 'Jenkins JOB Status \'${env.JOB_BASE_NAME} [${env.BUILDID}]\'', to: 'suresh.profile2008@gmail.com'
+  <p><b>SONAR ANALYSIS: </b><a href=http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic>http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic </a><p></div>''', compressLog: true, mimeType: 'html', recipientProviders: [developers(), requestor()], subject: 'Jenkins JOB Status \'${env.JOB_BASE_NAME} [${env.BUILDID}]\'', to: 'spancosuresh@gmail.com'
 
 
 // emailext(
