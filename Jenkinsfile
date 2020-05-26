@@ -62,15 +62,21 @@ sh 'mvn -Dmaven.test.skip=true clean install sonar:sonar \
 //   -Dsonar.login=b59ec99b58eed86f236c8173a3164a96e6d0eb73'
 
     }
-emailext(
-  to : 'suresh.profile2008@gmail.com;bhupathireddys@gmail.com;nagas400@gmail.com'
-  subject : "Jenkins JOB Status '${env.JOB_BASE_NAME} [${env.BUILDID}]'",
-  mimeType: 'text/html',
-  body: """ Hi All, <div>The Jenkis Build is <span style='color:red'><b> .....</b></span></div>
-  <div><b> JENKINS URL: </b><a href='${env.BUILD_URL}'>${env.BUILD_URL}</a>""",
-  <p><b>SONAR ANALYSIS: </b><a href=http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic>http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic </a><p></div>
-  recipientProviders: [[$class: 'DevelopersReciptientProvider']]
-)
+
+emailext attachLog: true, body: '''""" Hi All, <div>The Jenkis Build is <span style=\'color:red\'><b> .....</b></span></div>
+  <div><b> JENKINS URL: </b><a href=\'${env.BUILD_URL}\'>${env.BUILD_URL}</a>""",
+  <p><b>SONAR ANALYSIS: </b><a href=http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic>http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic </a><p></div>''', compressLog: true, mimeType: 'html', recipientProviders: [developers(), requestor()], subject: 'Jenkins JOB Status \'${env.JOB_BASE_NAME} [${env.BUILDID}]\'', to: 'suresh.profile2008@gmail.com'
+
+
+// emailext(
+//   to : 'suresh.profile2008@gmail.com;bhupathireddys@gmail.com;nagas400@gmail.com'
+//   subject : "Jenkins JOB Status '${env.JOB_BASE_NAME} [${env.BUILDID}]'",
+//   mimeType: 'text/html',
+//   body: """ Hi All, <div>The Jenkis Build is <span style='color:red'><b> .....</b></span></div>
+//   <div><b> JENKINS URL: </b><a href='${env.BUILD_URL}'>${env.BUILD_URL}</a>""",
+//   <p><b>SONAR ANALYSIS: </b><a href=http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic>http://192.168.1.114:9000/sonarqube/dashboard?id=sonarscanner-maven-basic </a><p></div>
+//   recipientProviders: [[$class: 'DevelopersReciptientProvider']]
+// )
 
 
   }
