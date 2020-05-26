@@ -115,7 +115,9 @@ stage ('Clean Workspace'){
 
 stage("publish to nexus") 
 {
-  nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '1.0']]]
+  createTag nexusInstanceId: 'nexus', tagName: '${env.BUILD_NUMBER}'
+  nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: '', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '1.0'
+//  nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: '', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '1.0']]]
 }
 
         // stage("publish to nexus") 
