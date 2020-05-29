@@ -78,7 +78,8 @@ sh 'mvn -Dmaven.test.skip=true clean install sonar:sonar \
 
     stage('SonarQube Quality Gate') {
         mvn "org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true -Pcoverage-per-test"
-        withSonarQubeEnv('SonarQube Octodemoapps') {
+        withSonarQubeEnv(credentialsId: 'jenkins-sonar-int', installationName: 'sonarqube') //{ // You can override the credential to be used
+        {
             mvn "org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar"
         }
         
