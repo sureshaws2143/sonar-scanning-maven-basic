@@ -63,17 +63,37 @@ sh 'mvn -Dmaven.test.skip=true clean install sonar:sonar \
 
     }
 // No need to occupy a node
-stage ("Quality Gate") 
-{
-  timeout(time: 1, unit: "HOURS")
-  {
-    def qg = waitForQualityGate()
-    if (qg.status != 'OK')
-    {
-      error "Pipeline aborted due to quality gate failure : ${qg.status}"
+// stage ("Quality Gate") 
+// {
+//   timeout(time: 5, unit: "MINUTES")
+//   {
+//     def qg = waitForQualityGate()
+//     if (qg.status != 'OK')
+//     {
+//       error "Pipeline aborted due to quality gate failure : ${qg.status}"
+//     }
+//   }
+// }
+
+
+    stage('SonarQube Quality Gate') {
+        mvn "org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true -Pcoverage-per-test"
+        withSonarQubeEnv('SonarQube Octodemoapps') {
+            mvn "org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar"
+        }
+        
+        context="sonarqube/qualitygate"
+        setBuildStatus ("${context}", 'Checking Sonarqube quality gate', 'PENDING')
+        timeout(time: 1, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
+            def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+            if (qg.status != 'OK') {
+                setBuildStatus ("${context}", "Sonarqube quality gate fail: ${qg.status}", 'FAILURE')
+                error "Pipeline aborted due to quality gate failure: ${qg.status}"
+            } else {
+                setBuildStatus ("${context}", "Sonarqube quality gate pass: ${qg.status}", 'SUCCESS')
+            }    
+        }
     }
-  }
-}
 
 
   }
