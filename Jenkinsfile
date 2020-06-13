@@ -143,7 +143,8 @@ stage("publish to nexus")
 {
   //createTag nexusInstanceId: 'nexus', tagName: '${env.BUILD_NUMBER}-$artifactId-1.0'
   //createTag nexusInstanceId: 'nexus', tagName: '${env.BUILD_NUMBER}'
-  nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: '', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '4.0'
+  nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: 'nexus-connect1', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '4.0'
+  //nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: '', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '4.0'
   //nexusArtifactUploader artifacts: [[artifactId: 'sonarscanner-maven-basic', classifier: '', file: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar', type: 'jar']], credentialsId: '', groupId: 'org.sonarqube', nexusUrl: '192.168.1.160:8090', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-releases', version: '2.0'
   //nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.jar']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '2.0']]]
   //nexusPublisher nexusInstanceId: 'nexus', nexusRepositoryId: 'maven-releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'jar', filePath: 'target/sonarscanner-maven-basic-1.0-SNAPSHOT.*']], mavenCoordinate: [artifactId: 'sonarscanner-maven-basic', groupId: 'org.sonarqube', packaging: 'jar', version: '2.0']]], tagName: 'env.BUILD_NUMBER-artifactId-1.0'
@@ -257,6 +258,77 @@ stage("publish to nexus")
         //             }
         //         }
 // End of Artifactory upload Stage
+
+// Start of Udeploy Pipeline Integration
+
+// stage("Udeploy Create Component Version")
+// {
+//    step([$class: 'UCDeployPublisher',
+//         siteName: 'local',
+//         component: [
+//             $class: 'com.urbancode.jenkins.plugins.ucdeploy.VersionHelper$VersionBlock',
+//             componentName: 'Jenkins',
+//             createComponent: [
+//                 $class: 'com.urbancode.jenkins.plugins.ucdeploy.ComponentHelper$CreateComponentBlock',
+//                 componentTemplate: '',
+//                 componentApplication: 'Jenkins'
+//             ],
+//             delivery: [
+//                 $class: 'com.urbancode.jenkins.plugins.ucdeploy.DeliveryHelper$Push',
+//                 pushVersion: '${BUILD_NUMBER}',
+//                 baseDir: 'jobs\\test-ucd\\workspace\\build\\distributions',
+//                 fileIncludePatterns: '*.zip',
+//                 fileExcludePatterns: '',
+//                 pushProperties: 'jenkins.server=Local\njenkins.reviewed=false',
+//                 pushDescription: 'Pushed from Jenkins',
+//                 pushIncremental: false
+//             ]
+//         ]
+//     ])
+// }
+// stage("Udeploy -  Deploy Component")
+// {
+//    step([$class: 'UCDeployPublisher',
+//         siteName: 'local',
+//         deploy: [
+//             $class: 'com.urbancode.jenkins.plugins.ucdeploy.DeployHelper$DeployBlock',
+//             deployApp: 'Jenkins',
+//             deployEnv: 'Test',
+//             deployProc: 'Deploy Jenkins',
+//             deployReqProps: 'AppProcessProp1=Value1\nAppProcessProp2=Value2',
+//             createProcess: [
+//                 $class: 'com.urbancode.jenkins.plugins.ucdeploy.ProcessHelper$CreateProcessBlock',
+//                 processComponent: 'Deploy'
+//             ],
+//             deployVersions: 'Jenkins:${BUILD_NUMBER}',
+//             deployOnlyChanged: false
+//         ]
+//     ])
+// }
+// stage("Udeploy -  Trigger Version Import")
+// {
+//    step([$class: 'UCDeployPublisher',
+//         siteName: 'local',
+//         component: [
+//             $class: 'com.urbancode.jenkins.plugins.ucdeploy.VersionHelper$VersionBlock',
+//             componentName: 'Jenkins',
+//             createComponent: [
+//                 $class: 'com.urbancode.jenkins.plugins.ucdeploy.ComponentHelper$CreateComponentBlock',
+//                 componentTemplate: '',
+//                 componentApplication: 'Local'
+//             ],
+//             delivery: [
+//                 $class: 'com.urbancode.jenkins.plugins.ucdeploy.DeliveryHelper$Pull',
+//                 pullProperties: 'FileSystemImportProperties/name=${BUILD_NUMBER}\nFileSystemImportProperties/description=Pushed from Jenkins',
+//                 pullSourceType: 'File System',
+//                 pullSourceProperties: 'FileSystemComponentProperties/basePath=C:\\Test',
+//                 pullIncremental: false
+//             ]
+//         ]
+//     ])
+// }
+
+// End of Udeploy Pipeline Integration
 
 stage("Email Notifications")
 {
